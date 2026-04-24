@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block titulo %}ZenuMarket — Inicio{% endblock %}
+
+{% block contenido %}
+<div class="text-center py-12">
+    <h1 class="text-4xl font-bold text-green-700 mb-4">🌿 Bienvenido a ZenuMarket</h1>
+    <p class="text-gray-500 mb-8">El marketplace de nuestra comunidad</p>
+
+    {% if not user.is_authenticated %}
+        <div class="flex gap-4 justify-center">
+            <a href="{% url 'registro' %}"
+                class="bg-green-700 text-white px-6 py-3 rounded-lg hover:bg-green-800">
+                Crear cuenta
+            </a>
+            <a href="{% url 'login' %}"
+                class="border border-green-700 text-green-700 px-6 py-3 rounded-lg hover:bg-green-50">
+                Ingresar
+            </a>
+        </div>
+    {% else %}
+        <p class="text-gray-600">¡Hola, <strong>{{ user.first_name }}</strong>! Ya puedes explorar el marketplace.</p>
+    {% endif %}
+</div>
+{% endblock %}
