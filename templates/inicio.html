@@ -2,23 +2,96 @@
 {% block titulo %}ZenuMarket — Inicio{% endblock %}
 
 {% block contenido %}
-<div class="text-center py-12">
-    <h1 class="text-4xl font-bold text-green-700 mb-4">🌿 Bienvenido a ZenuMarket</h1>
-    <p class="text-gray-500 mb-8">El marketplace de nuestra comunidad</p>
 
-    {% if not user.is_authenticated %}
-        <div class="flex gap-4 justify-center">
-            <a href="{% url 'registro' %}"
-                class="bg-green-700 text-white px-6 py-3 rounded-lg hover:bg-green-800">
-                Crear cuenta
+<!-- Hero principal -->
+<div style="background:#CC0000" class="rounded-2xl p-8 mb-8 flex justify-between items-center">
+    <div class="text-white">
+        <h1 class="text-3xl font-bold mb-2 leading-tight">
+            El sabor Zenú,<br>
+            <span style="color:#FFD700">directo a tu mesa</span>
+        </h1>
+        <p class="opacity-85 text-sm mb-6 max-w-sm">
+            Compra productos Zenú de vendedores verificados en toda Colombia.
+            Carnes frías, atún, apanados y mucho más.
+        </p>
+        <div class="flex gap-3">
+            <a href="{% url 'lista_productos' %}"
+                class="bg-white font-medium text-sm px-5 py-2 rounded-full hover:bg-gray-100"
+                style="color:#CC0000">
+                Ver productos
             </a>
-            <a href="{% url 'login' %}"
-                class="border border-green-700 text-green-700 px-6 py-3 rounded-lg hover:bg-green-50">
-                Ingresar
-            </a>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'registro' %}"
+                    class="border border-white text-white text-sm px-5 py-2 rounded-full hover:bg-red-700">
+                    Vender aquí
+                </a>
+            {% endif %}
         </div>
-    {% else %}
-        <p class="text-gray-600">¡Hola, <strong>{{ user.first_name }}</strong>! Ya puedes explorar el marketplace.</p>
-    {% endif %}
+    </div>
+    <div class="hidden md:block text-8xl">🥩</div>
 </div>
+
+<!-- Categorías -->
+<div class="mb-8">
+    <h2 class="text-lg font-medium text-gray-800 mb-4">Categorías</h2>
+    <div class="grid grid-cols-4 md:grid-cols-8 gap-3">
+        {% for cat in categorias %}
+            <a href="{% url 'lista_productos' %}?categoria={{ cat.slug }}"
+                class="flex flex-col items-center gap-2 bg-white border rounded-xl p-3 hover:border-red-400 transition text-center">
+                <div class="text-2xl">{{ cat.icono }}</div>
+                <span class="text-xs text-gray-600 leading-tight">{{ cat.nombre }}</span>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Productos destacados -->
+<div class="mb-8">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-medium text-gray-800">Productos destacados</h2>
+        <a href="{% url 'lista_productos' %}" class="text-sm hover:underline" style="color:#CC0000">Ver todos →</a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {% for producto in productos_destacados %}
+            <div class="bg-white rounded-xl border hover:shadow-md transition overflow-hidden">
+                <a href="{% url 'detalle_producto' producto.pk %}">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" class="w-full h-36 object-cover">
+                    {% else %}
+                        <div class="w-full h-36 bg-red-50 flex items-center justify-center text-4xl">🥩</div>
+                    {% endif %}
+                    <div class="p-3">
+                        <p class="text-sm font-medium text-gray-800 mb-1">{{ producto.nombre }}</p>
+                        <p class="text-xs text-gray-400 mb-2">{{ producto.vendedor.nombre_tienda }}</p>
+                        <p class="font-bold" style="color:#CC0000">${{ producto.precio }}</p>
+                    </div>
+                </a>
+                <!-- Botón agregar al carrito -->
+                <div class="px-3 pb-3">
+                    <a href="{% url 'agregar_al_carrito' producto.pk %}"
+                        class="block w-full text-center text-white text-sm py-2 rounded-full font-medium hover:opacity-90"
+                        style="background:#CC0000">
+                        Agregar al carrito
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-gray-400 text-sm col-span-4">Aún no hay productos publicados.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Banner vendedores -->
+<div class="bg-gray-900 rounded-2xl p-6 flex justify-between items-center">
+    <div class="text-white">
+        <h3 class="font-medium text-lg mb-1">¿Eres distribuidor Zenú?</h3>
+        <p class="text-gray-400 text-sm">Registra tu tienda y llega a más clientes en toda Colombia</p>
+    </div>
+    <a href="{% url 'registro' %}"
+        class="bg-white font-medium text-sm px-6 py-2 rounded-full hover:bg-gray-100 whitespace-nowrap"
+        style="color:#CC0000">
+        Quiero vender
+    </a>
+</div>
+
 {% endblock %}
