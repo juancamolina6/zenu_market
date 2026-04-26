@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block titulo %}Mi carrito — ZenuMarket{% endblock %}
+
+{% block contenido %}
+<h1 class="text-xl font-medium text-gray-800 mb-6">Mi carrito</h1>
+
+{% if lineas %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Lista de productos -->
+        <div class="md:col-span-2 flex flex-col gap-3">
+            {% for linea in lineas %}
+                <div class="bg-white border rounded-xl p-4 flex gap-4 items-center">
+                    {% if linea.producto.imagen %}
+                        <img src="{{ linea.producto.imagen.url }}"
+                            class="w-20 h-20 object-cover rounded-lg">
+                    {% else %}
+                        <div class="w-20 h-20 bg-red-50 rounded-lg flex items-center justify-center text-3xl">🥩</div>
+                    {% endif %}
+
+                    <div class="flex-1">
+                        <p class="font-medium text-gray-800">{{ linea.producto.nombre }}</p>
+                        <p class="text-sm text-gray-400">{{ linea.producto.vendedor.nombre_tienda }}</p>
+                        <p class="font-bold mt-1" style="color:#CC0000">
+                            ${{ linea.subtotal }}
+                        </p>
+                        <p class="text-xs text-gray-400">
+                            ${{ linea.producto.precio }} × {{ linea.cantidad }} unidades
+                        </p>
+                    </div>
+
+                    <a href="{% url 'eliminar_del_carrito' linea.pk %}"
+                        class="text-gray-400 hover:text-red-600 text-sm">
+                        Eliminar
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Resumen del pedido -->
+        <div class="bg-white border rounded-xl p-5 h-fit">
+            <h2 class="font-medium text-gray-800 mb-4">Resumen</h2>
+            <div class="flex justify-between text-sm text-gray-500 mb-2">
+                <span>Productos ({{ carrito.total_items }} items)</span>
+                <span>${{ carrito.calcular_total }}</span>
+            </div>
+            <div class="flex justify-between text-sm text-gray-500 mb-4">
+                <span>Envío</span>
+                <span class="text-green-600">Por definir</span>
+            </div>
+            <div class="border-t pt-3 flex justify-between font-medium text-gray-800 mb-4">
+                <span>Total</span>
+                <span style="color:#CC0000">${{ carrito.calcular_total }}</span>
+            </div>
+            <a href="{% url 'confirmar_pedido' %}"
+                class="block w-full text-center text-white py-2 rounded-full font-medium hover:opacity-90"
+                style="background:#CC0000">
+                Confirmar pedido
+            </a>
+        </div>
+
+    </div>
+{% else %}
+    <div class="text-center py-16">
+        <p class="text-5xl mb-4">🛒</p>
+        <p class="text-gray-400 mb-6">Tu carrito está vacío</p>
+        <a href="{% url 'lista_productos' %}"
+            class="text-white px-6 py-2 rounded-full font-medium"
+            style="background:#CC0000">
+            Ver productos
+        </a>
+    </div>
+{% endif %}
+{% endblock %}
