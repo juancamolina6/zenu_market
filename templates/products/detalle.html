@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block titulo %}{{ producto.nombre }} — ZenuMarket{% endblock %}
+
+{% block contenido %}
+<div class="bg-white rounded-xl border p-6 flex gap-8">
+
+    <!-- Imagen -->
+    <div class="w-64 flex-shrink-0">
+        {% if producto.imagen %}
+            <img src="{{ producto.imagen.url }}" class="w-full rounded-xl object-cover">
+        {% else %}
+            <div class="w-full h-64 bg-red-50 rounded-xl flex items-center justify-center text-6xl">🥩</div>
+        {% endif %}
+    </div>
+
+    <!-- Información -->
+    <div class="flex-1">
+        <p class="text-xs text-gray-400 mb-1">{{ producto.categoria.nombre }}</p>
+        <h1 class="text-2xl font-medium text-gray-800 mb-2">{{ producto.nombre }}</h1>
+        <p class="text-sm text-gray-500 mb-1">Vendedor: <span class="font-medium">{{ producto.vendedor.nombre_tienda }}</span></p>
+        <p class="text-sm text-gray-400 mb-4">SKU: {{ producto.sku }}</p>
+
+        <p class="text-3xl font-bold mb-4" style="color:#CC0000">${{ producto.precio }}</p>
+
+        {% if producto.descripcion %}
+            <p class="text-sm text-gray-600 mb-6">{{ producto.descripcion }}</p>
+        {% endif %}
+
+        <p class="text-sm text-gray-400 mb-4">
+            Stock disponible:
+            <span class="font-medium text-gray-700">{{ producto.stock }} unidades</span>
+        </p>
+
+        <!-- Botón agregar al carrito -->
+        {% if producto.tiene_stock %}
+            <a href="{% url 'agregar_al_carrito' producto.pk %}"
+                class="inline-block text-white px-8 py-3 rounded-full font-medium hover:opacity-90"
+                style="background:#CC0000">
+                Agregar al carrito
+            </a>
+        {% else %}
+            <span class="inline-block bg-gray-100 text-gray-400 px-8 py-3 rounded-full font-medium">
+                Sin stock
+            </span>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

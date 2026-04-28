@@ -4,29 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block titulo %}ZenuMarket{% endblock %}</title>
-    <!-- Tailwind CSS desde CDN para estilos rápidos -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Color principal ZenuMarket */
+        :root { --zenu-red: #CC0000; --zenu-red-dark: #AA0000; }
+    </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
 
     <!-- Barra de navegación -->
-    <nav class="bg-green-700 text-white px-6 py-4 flex justify-between items-center">
-        <a href="{% url 'inicio' %}" class="text-xl font-bold">🌿 ZenuMarket</a>
-        <div class="flex gap-4">
+    <nav style="background:#CC0000" class="text-white px-6 py-3 flex justify-between items-center shadow">
+
+        <!-- Logo -->
+        <a href="{% url 'inicio' %}"
+            class="bg-white font-bold text-lg px-3 py-1 rounded-xl"
+            style="color:#CC0000; letter-spacing:-0.5px">
+            ZenuMarket
+        </a>
+
+        <!-- Links del centro -->
+        <div class="hidden md:flex gap-6 text-sm">
+            <a href="{% url 'lista_productos' %}" class="hover:underline opacity-90">Productos</a>
+            <a href="#" class="hover:underline opacity-90">Vendedores</a>
+            <a href="#" class="hover:underline opacity-90">Recetas</a>
+        </div>
+
+        <!-- Acciones derecha -->
+        <div class="flex items-center gap-3">
             {% if user.is_authenticated %}
-                <a href="{% url 'perfil' %}" class="hover:underline">{{ user.first_name }}</a>
-                <a href="{% url 'logout' %}" class="hover:underline">Salir</a>
+                <span class="text-sm opacity-90">Hola, {{ user.first_name|default:user.username }}</span>
+                <!-- Botón carrito con contador -->
+                <a href="{% url 'ver_carrito' %}"
+                    class="bg-white text-sm font-medium px-4 py-1 rounded-full hover:bg-gray-100 flex items-center gap-1"
+                    style="color:#CC0000">
+                    🛒
+                    {% if user.carrito %}
+                        <span class="font-bold">{{ user.carrito.total_items }}</span>
+                    {% endif %}
+                </a>
+                <a href="{% url 'perfil' %}"
+                    class="bg-white text-sm font-medium px-4 py-1 rounded-full hover:bg-gray-100"
+                    style="color:#CC0000">
+                    Mi cuenta
+                </a>
+                <a href="{% url 'logout' %}" class="text-sm opacity-80 hover:underline">Salir</a>
             {% else %}
-                <a href="{% url 'login' %}" class="hover:underline">Ingresar</a>
-                <a href="{% url 'registro' %}" class="hover:underline">Registrarse</a>
+                <a href="{% url 'login' %}" class="text-sm opacity-90 hover:underline">Ingresar</a>
+                <a href="{% url 'registro' %}"
+                    class="bg-white text-sm font-medium px-4 py-1 rounded-full hover:bg-gray-100"
+                    style="color:#CC0000">
+                    Registrarse
+                </a>
             {% endif %}
         </div>
     </nav>
 
-    <!-- Mensajes de éxito / error -->
-    <div class="max-w-2xl mx-auto mt-4">
+    <!-- Mensajes del sistema (éxito, error, info) -->
+    <div class="max-w-5xl mx-auto mt-4 px-4">
         {% for message in messages %}
-            <div class="p-3 rounded mb-2
+            <div class="p-3 rounded-lg mb-2 text-sm
                 {% if message.tags == 'success' %}bg-green-100 text-green-800
                 {% elif message.tags == 'error' %}bg-red-100 text-red-800
                 {% else %}bg-blue-100 text-blue-800{% endif %}">
@@ -35,10 +71,37 @@
         {% endfor %}
     </div>
 
-    <!-- Contenido de cada página -->
-    <main class="max-w-2xl mx-auto mt-8 px-4">
+    <!-- Contenido principal de cada página -->
+    <main class="max-w-5xl mx-auto px-4 py-6">
         {% block contenido %}{% endblock %}
     </main>
+
+    <!-- Footer -->
+    <footer class="mt-12 border-t bg-white">
+        <div class="max-w-5xl mx-auto px-4 py-8 grid grid-cols-3 gap-8 text-sm">
+            <div>
+                <p class="font-medium mb-3" style="color:#CC0000">ZenuMarket</p>
+                <p class="text-gray-500 text-xs leading-relaxed">
+                    Marketplace de distribuidores y vendedores verificados de productos Zenú en Colombia.
+                </p>
+            </div>
+            <div>
+                <p class="font-medium text-gray-700 mb-3">Vendedores</p>
+                <a href="{% url 'registro' %}" class="block text-gray-500 text-xs mb-1 hover:text-red-700">Registrarse</a>
+                <a href="#" class="block text-gray-500 text-xs mb-1 hover:text-red-700">Verificación</a>
+                <a href="{% url 'lista_productos' %}" class="block text-gray-500 text-xs hover:text-red-700">Ver productos</a>
+            </div>
+            <div>
+                <p class="font-medium text-gray-700 mb-3">Ayuda</p>
+                <a href="#" class="block text-gray-500 text-xs mb-1 hover:text-red-700">Envíos</a>
+                <a href="#" class="block text-gray-500 text-xs mb-1 hover:text-red-700">Devoluciones</a>
+                <a href="#" class="block text-gray-500 text-xs hover:text-red-700">Contáctanos</a>
+            </div>
+        </div>
+        <div class="border-t text-center py-3 text-xs text-gray-400">
+            © 2026 ZenuMarket — Todos los derechos reservados
+        </div>
+    </footer>
 
 </body>
 </html>

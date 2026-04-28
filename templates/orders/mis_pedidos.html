@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block titulo %}Mis pedidos — ZenuMarket{% endblock %}
+
+{% block contenido %}
+<h1 class="text-xl font-medium text-gray-800 mb-6">Mis pedidos</h1>
+
+{% if pedidos %}
+    <div class="flex flex-col gap-4">
+        {% for pedido in pedidos %}
+            <div class="bg-white border rounded-xl p-5">
+                <div class="flex justify-between items-center mb-3">
+                    <div>
+                        <p class="font-medium text-gray-800">Pedido #{{ pedido.pk }}</p>
+                        <p class="text-xs text-gray-400">{{ pedido.fecha|date:"d/m/Y H:i" }}</p>
+                    </div>
+                    <!-- Badge de estado con color según el estado -->
+                    <span class="text-xs px-3 py-1 rounded-full font-medium
+                        {% if pedido.estado == 'entregado' %}bg-green-100 text-green-700
+                        {% elif pedido.estado == 'cancelado' %}bg-red-100 text-red-700
+                        {% elif pedido.estado == 'en_camino' %}bg-blue-100 text-blue-700
+                        {% else %}bg-yellow-100 text-yellow-700{% endif %}">
+                        {{ pedido.get_estado_display }}
+                    </span>
+                </div>
+
+                <!-- Líneas del pedido -->
+                <div class="border-t pt-3 text-sm text-gray-600 flex flex-col gap-1">
+                    {% for linea in pedido.lineas.all %}
+                        <div class="flex justify-between">
+                            <span>{{ linea.nombre_producto }} × {{ linea.cantidad }}</span>
+                            <span>${{ linea.subtotal }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="border-t mt-3 pt-3 flex justify-between font-medium">
+                    <span class="text-gray-700">Total</span>
+                    <span style="color:#CC0000">${{ pedido.total }}</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-16">
+        <p class="text-5xl mb-4">📦</p>
+        <p class="text-gray-400 mb-6">Aún no tienes pedidos</p>
+        <a href="{% url 'lista_productos' %}"
+            class="text-white px-6 py-2 rounded-full font-medium"
+            style="background:#CC0000">
+            Ver productos
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

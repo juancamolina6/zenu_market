@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block titulo %}Confirmar pedido — ZenuMarket{% endblock %}
+
+{% block contenido %}
+<h1 class="text-xl font-medium text-gray-800 mb-6">Confirmar pedido</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Resumen de productos -->
+    <div>
+        <h2 class="font-medium text-gray-700 mb-3">Tu pedido</h2>
+        <div class="bg-white border rounded-xl divide-y">
+            {% for linea in lineas %}
+                <div class="flex justify-between items-center p-3 text-sm">
+                    <span class="text-gray-700">{{ linea.producto.nombre }} × {{ linea.cantidad }}</span>
+                    <span class="font-medium" style="color:#CC0000">${{ linea.subtotal }}</span>
+                </div>
+            {% endfor %}
+            <div class="flex justify-between items-center p-3 font-medium">
+                <span>Total</span>
+                <span style="color:#CC0000">${{ carrito.calcular_total }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de entrega -->
+    <div>
+        <h2 class="font-medium text-gray-700 mb-3">Dirección de entrega</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <textarea name="direccion_entrega"
+                rows="3"
+                placeholder="Ej: Calle 50 #30-15, Barrio El Centro, Montería, Córdoba"
+                class="w-full border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 mb-4"
+                style="focus-ring-color:#CC0000">{{ request.user.perfil.direccion }}</textarea>
+
+            <button type="submit"
+                class="w-full text-white py-3 rounded-full font-medium hover:opacity-90"
+                style="background:#CC0000">
+                Confirmar y pagar
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

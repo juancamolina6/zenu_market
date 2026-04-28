@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import RegistroForm, EditarPerfilForm
 from .models import Perfil, Vendedor, Cliente
-
+from products.models import Producto, Categoria
 
 # ============================================================
 # VISTA DE REGISTRO
@@ -139,4 +139,15 @@ def perfil(request):
 # Página principal de ZenuMarket.
 # ============================================================
 def inicio(request):
-    return render(request, 'inicio.html')
+    # Los 8 productos más recientes para la página de inicio
+    productos_destacados = Producto.objects.filter(
+        estado='activo'
+    ).select_related('vendedor', 'categoria')[:8]
+
+    # Todas las categorías para el menú de inicio
+    categorias = Categoria.objects.all()
+
+    return render(request, 'inicio.html', {
+        'productos_destacados': productos_destacados,
+        'categorias': categorias,
+    })

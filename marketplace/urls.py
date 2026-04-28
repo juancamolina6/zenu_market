@@ -1,5 +1,5 @@
 """
-URL configuration for zenumarket project.
+URL configuration for marketplace project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/6.0/topics/http/urls/
@@ -15,22 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
-from users import views as user_views
+from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-        # URLs de la app users
-    path('', include('users.urls')),
-    # Página de inicio
-    path('', user_views.inicio, name='inicio'),
-    path('products/', include('products.urls')), 
-    path('orders/', include('orders.urls')),
 ]
-
-# Esto solo aplica en desarrollo (DEBUG=True)
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
