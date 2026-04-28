@@ -53,8 +53,18 @@
                     <p class="font-medium text-sm">{{ producto.nombre }}</p>
                     <p class="text-green-700 font-bold">${{ producto.precio }}</p>
                     <p class="text-xs text-gray-400">{{ producto.vendedor.nombre_tienda }}</p>
+                    <div class="px-3 pb-3">
+                    <a href="{% url 'agregar_al_carrito' producto.pk %}"
+                        class="block w-full text-center text-white text-sm py-2 rounded-full font-medium hover:opacity-90"
+                        style="background:#CC0000">
+                        Agregar al carrito
+                    </a>
+            </div>
                 </div>
+                <!-- Botón agregar al carrito -->
+            
             </a>
+            
         {% endfor %}
     </div>
 {% else %}
