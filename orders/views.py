@@ -58,6 +58,42 @@ def agregar_al_carrito(request, producto_id):
 
 
 # ============================================================
+# ACTUALIZAR CANTIDAD EN EL CARRITO
+# Aumenta o disminuye la cantidad de un producto.
+# Si la cantidad llega a 0 elimina la línea.
+# ============================================================
+@login_required
+def actualizar_cantidad(request, linea_id, accion):
+    """
+    accion puede ser 'aumentar' o 'disminuir'.
+    Si stock llega a 0 con disminuir, elimina la línea.
+    """
+    linea = get_object_or_404(
+        LineaCarrito,
+        pk=linea_id,
+        carrito__usuario=request.user
+    )
+
+    if accion == 'aumentar':
+        # Verificar que no supere el stock disponible
+        if linea.cantidad < linea.producto.stock:
+            linea.cantidad += 1
+            linea.save()
+        else:
+            messages.warning(request, 'No hay más stock disponible.')
+
+    elif accion == 'disminuir':
+        if linea.cantidad > 1:
+            linea.cantidad -= 1
+            linea.save()
+        else:
+            # Si ya está en 1 y baja, eliminar la línea
+            linea.delete()
+            messages.success(request, 'Producto eliminado del carrito.')
+
+    return redirect('ver_carrito')
+
+# ============================================================
 # ELIMINAR DEL CARRITO
 # Elimina una línea completa del carrito.
 # ============================================================

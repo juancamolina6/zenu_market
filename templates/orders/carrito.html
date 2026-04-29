@@ -11,13 +11,14 @@
         <div class="md:col-span-2 flex flex-col gap-3">
             {% for linea in lineas %}
                 <div class="bg-white border rounded-xl p-4 flex gap-4 items-center">
+                    <!-- Imagen -->
                     {% if linea.producto.imagen %}
                         <img src="{{ linea.producto.imagen.url }}"
                             class="w-20 h-20 object-cover rounded-lg">
                     {% else %}
                         <div class="w-20 h-20 bg-red-50 rounded-lg flex items-center justify-center text-3xl">🥩</div>
                     {% endif %}
-
+                    <!-- Nombre y precio -->
                     <div class="flex-1">
                         <p class="font-medium text-gray-800">{{ linea.producto.nombre }}</p>
                         <p class="text-sm text-gray-400">{{ linea.producto.vendedor.nombre_tienda }}</p>
@@ -28,7 +29,29 @@
                             ${{ linea.producto.precio }} × {{ linea.cantidad }} unidades
                         </p>
                     </div>
+                    <!-- Controles de cantidad -->
+                    <div class="flex items-center gap-2">
 
+                        <!-- Botón disminuir -->
+                        <a href="{% url 'actualizar_cantidad' linea.pk 'disminuir' %}"
+                            class="w-8 h-8 rounded-full border flex items-center justify-center text-lg font-medium hover:bg-red-50 hover:border-red-400 transition"
+                            style="color:#CC0000; border-color:#CC0000">
+                            −
+                        </a>
+
+                        <!-- Cantidad actual -->
+                        <span class="w-8 text-center font-medium text-gray-800">
+                            {{ linea.cantidad }}
+                        </span>
+
+                        <!-- Botón aumentar -->
+                        <a href="{% url 'actualizar_cantidad' linea.pk 'aumentar' %}"
+                            class="w-8 h-8 rounded-full border flex items-center justify-center text-lg font-medium hover:bg-red-50 hover:border-red-400 transition"
+                            style="color:#CC0000; border-color:#CC0000">
+                            +
+                        </a>
+
+                    </div>
                     <a href="{% url 'eliminar_del_carrito' linea.pk %}"
                         class="text-gray-400 hover:text-red-600 text-sm">
                         Eliminar
