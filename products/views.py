@@ -25,11 +25,12 @@ def lista_productos(request):
 
     # Búsqueda por nombre o descripción si viene en la URL ej: ?q=zapatos
     # Q permite combinar condiciones con OR (|)
-    busqueda = request.GET.get('q')
+    busqueda = request.GET.get('q','').strip()
     if busqueda:
         productos = productos.filter(
             Q(nombre__icontains=busqueda) |       # busca en el nombre
-            Q(descripcion__icontains=busqueda)    # o en la descripción
+            Q(descripcion__icontains=busqueda) |   # o en la descripción
+            Q(sku__icontains=busqueda)
         )
 
     categorias = Categoria.objects.all()
