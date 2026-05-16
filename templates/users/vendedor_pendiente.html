@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block titulo %}Solicitud en revisión — ZenuMarket{% endblock %}
+
+{% block contenido %}
+<div class="max-w-md mx-auto text-center py-12">
+    <p class="text-6xl mb-4">⏳</p>
+    <h1 class="text-xl font-medium text-gray-800 mb-2">Solicitud en revisión</h1>
+    <p class="text-gray-500 text-sm mb-2">
+        Hemos recibido tu solicitud para
+        <strong>{{ vendedor.nombre_tienda }}</strong>.
+    </p>
+    <p class="text-gray-400 text-sm mb-8">
+        Nuestro equipo la revisará en menos de 24 horas
+        y te notificaremos al correo registrado.
+    </p>
+    <a href="{% url 'lista_productos' %}"
+        class="text-white px-6 py-2 rounded-full text-sm font-medium"
+        style="background:#CC0000">
+        Explorar productos
+    </a>
+</div>
+{% endblock %}
