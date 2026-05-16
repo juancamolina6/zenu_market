@@ -89,3 +89,20 @@ class EditarPerfilForm(forms.ModelForm):
             # Widget especial para que el campo fecha muestre un selector
             'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
         }
+# ============================================================
+# FORMULARIO PARA SOLICITAR SER VENDEDOR
+# El usuario llena este formulario y queda en estado
+# "pendiente" hasta que el admin lo apruebe.
+# ============================================================
+class SolicitudVendedorForm(forms.ModelForm):
+
+    class Meta:
+        model = Vendedor
+        fields = ['nombre_tienda', 'descripcion_tienda']
+        labels = {
+            'nombre_tienda': 'Nombre de tu tienda',
+            'descripcion_tienda': '¿Qué productos vas a vender?',
+        }
+        widgets = {
+            'descripcion_tienda': forms.Textarea(attrs={'rows': 4}),
+        }

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block titulo %}Mis productos — ZenuMarket{% endblock %}
+
+{% block contenido %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-xl font-medium text-gray-800">Mis productos</h1>
+    <div class="flex gap-3">
+        <a href="{% url 'dashboard_vendedor' %}"
+            class="text-sm px-4 py-2 rounded-full border hover:bg-gray-50"
+            style="color:#CC0000; border-color:#CC0000">
+            ← Dashboard
+        </a>
+        <a href="{% url 'crear_producto' %}"
+            class="text-sm text-white px-4 py-2 rounded-full hover:opacity-90"
+            style="background:#CC0000">
+            + Nuevo producto
+        </a>
+    </div>
+</div>
+
+{% if productos %}
+    <div class="bg-white border rounded-xl overflow-hidden">
+        <div class="divide-y">
+            {% for producto in productos %}
+                <div class="p-4 flex gap-4 items-center">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}"
+                            class="w-14 h-14 object-cover rounded-lg flex-shrink-0">
+                    {% else %}
+                        <div class="w-14 h-14 bg-red-50 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">🥩</div>
+                    {% endif %}
+
+                    <div class="flex-1">
+                        <p class="font-medium text-gray-800">{{ producto.nombre }}</p>
+                        <p class="text-xs text-gray-400">SKU: {{ producto.sku }}</p>
+                        <p class="text-sm font-medium mt-0.5" style="color:#CC0000">
+                            ${{ producto.precio }}
+                        </p>
+                    </div>
+
+                    <!-- Stock -->
+                    <div class="text-center">
+                        <p class="text-xs text-gray-400">Stock</p>
+                        <p class="font-medium text-gray-800">{{ producto.stock }}</p>
+                    </div>
+
+                    <!-- Estado badge -->
+                    <span class="text-xs px-3 py-1 rounded-full font-medium
+                        {% if producto.estado == 'activo' %}bg-green-100 text-green-700
+                        {% elif producto.estado == 'agotado' %}bg-red-100 text-red-700
+                        {% else %}bg-gray-100 text-gray-500{% endif %}">
+                        {{ producto.get_estado_display }}
+                    </span>
+
+                    <!-- Acciones -->
+                    <a href="{% url 'editar_producto' producto.pk %}"
+                        class="text-sm px-3 py-1 rounded-full border hover:bg-red-50"
+                        style="color:#CC0000; border-color:#CC0000">
+                        Editar
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <div class="text-center py-16">
+        <p class="text-5xl mb-4">📦</p>
+        <p class="text-gray-400 mb-6">Aún no tienes productos publicados</p>
+        <a href="{% url 'crear_producto' %}"
+            class="text-white px-6 py-2 rounded-full font-medium"
+            style="background:#CC0000">
+            Publicar primer producto
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

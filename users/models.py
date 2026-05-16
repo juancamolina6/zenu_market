@@ -36,6 +36,7 @@ class Vendedor(models.Model):
 
     # Opciones de estado del vendedor
     ESTADO_CHOICES = [
+        ('pendiente', 'Pendiente de verificación'),
         ('activo', 'Activo'),
         ('inactivo', 'Inactivo'),
         ('suspendido', 'Suspendido'),
@@ -44,7 +45,8 @@ class Vendedor(models.Model):
     # Un vendedor está ligado a un único usuario
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
     nombre_tienda = models.CharField(max_length=200)
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='activo')
+    descripcion_tienda = models.TextField( blank=True,help_text='Cuéntanos sobre tu tienda')
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='pendiente')
     fecha_registro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

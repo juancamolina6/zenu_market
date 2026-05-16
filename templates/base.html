@@ -29,9 +29,10 @@
             <a href="#" class="hover:underline opacity-90">Recetas</a>
         </div>
 
-        <!-- Acciones derecha -->
+        
         <div class="flex items-center gap-3">
             {% if user.is_authenticated %}
+                <!-- Acciones derecha -->
                 <span class="text-sm opacity-90">Hola, {{ user.first_name|default:user.username }}</span>
                 <!-- Botón carrito con contador -->
                 <a href="{% url 'ver_carrito' %}"
@@ -42,6 +43,14 @@
                         <span class="font-bold">{{ user.carrito.total_items }}</span>
                     {% endif %}
                 </a>
+                <!-- Enlace al panel si es vendedor activo -->
+                {% if user.vendedor.estado == 'activo' %}
+                    <a href="{% url 'dashboard_vendedor' %}"
+                        class="bg-white text-sm font-medium px-4 py-1 rounded-full hover:bg-gray-100"
+                        style="color:#CC0000">
+                        Mi panel
+                    </a>
+                {% endif %}
                 <a href="{% url 'perfil' %}"
                     class="bg-white text-sm font-medium px-4 py-1 rounded-full hover:bg-gray-100"
                     style="color:#CC0000">
@@ -49,12 +58,12 @@
                 </a>
                 <a href="{% url 'logout' %}" class="text-sm opacity-80 hover:underline">Salir</a>
             {% else %}
-                <a href="{% url 'login' %}" class="text-sm opacity-90 hover:underline">Ingresar</a>
-                <a href="{% url 'registro' %}"
-                    class="bg-white text-sm font-medium px-4 py-1 rounded-full hover:bg-gray-100"
-                    style="color:#CC0000">
-                    Registrarse
-                </a>
+                    <a href="{% url 'login' %}" class="text-sm opacity-90 hover:underline">Ingresar</a>
+                    <a href="{% url 'registro' %}"
+                        class="bg-white text-sm font-medium px-4 py-1 rounded-full hover:bg-gray-100"
+                        style="color:#CC0000">
+                        Registrarse
+                    </a>
             {% endif %}
         </div>
     </nav>

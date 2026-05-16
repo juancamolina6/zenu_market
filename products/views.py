@@ -62,10 +62,28 @@ def detalle_producto(request, pk):
 def crear_producto(request):
     # Verificar que el usuario tiene perfil de Vendedor
     try:
-        vendedor = Vendedor.objects.get(usuario=request.user)
+        vendedor = Vendedor.objects.get(usuario=request.user, estado='activo' )
     except Vendedor.DoesNotExist:
-        messages.error(request, 'Necesitas ser vendedor para publicar productos.')
-        return redirect('lista_productos')
+        # Verificar si tiene solicitud pendiente
+        try:
+            vendedor_pendiente = Vendedor.objects.get(usuario=request.user)
+            if vendedor_pendiente.estado == 'pendiente':
+                messages.error(
+                    request,
+                    'Tu solicitud como vendedor está siendo revisada. '
+                    'Podrás publicar productos cuando sea aprobada.'
+                )
+            else:
+                messages.error(
+                    request,
+                    'Necesitas ser vendedor verificado para publicar productos.'
+                )
+        except Vendedor.DoesNotExist:
+            messages.error(
+                request,
+                'Necesitas registrarte como vendedor primero.'
+            )
+        return redirect('solicitar_vendedor')
 
     if request.method == 'POST':
         # request.FILES contiene los archivos subidos (imagen)
